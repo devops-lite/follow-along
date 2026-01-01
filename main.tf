@@ -14,7 +14,7 @@ resource "aws_instance" "example" {
     sudo apt-get update
     sudo apt-get install -y apache2 busybox
     echo "Hello, World" > index.html
-    nohup busybox httpd -f -p 8080 &
+    nohup busybox httpd -f -p ${var.server_port} &
     EOF
   user_data_replace_on_change = true
 
@@ -36,8 +36,8 @@ resource "aws_security_group" "instance" {
   vpc_id = module.vpc.vpc_id
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = var.server_port
+    to_port     = var.server_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
