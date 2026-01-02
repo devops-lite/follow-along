@@ -2,6 +2,10 @@ output "ami_ubuntu_minimal_arm64" {
   value = data.aws_ami.ubuntu_minimal_arm64.id
 }
 
+output "ami_ubuntu_server_arm64" {
+  value = data.aws_ami.ubuntu_server_arm64.id
+}
+
 output "vpc_id" {
   description = "VPC ID"
   value       = data.aws_vpc.this.id

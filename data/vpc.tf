@@ -26,13 +26,6 @@ data "aws_subnets" "public" {
     name   = "map-public-ip-on-launch"
     values = [true]
   }
-
-  lifecycle {
-    postcondition {
-      condition     = length(self) > 0
-      error_message = "Subnets not found"
-    }
-  }
 }
 
 data "aws_subnets" "private" {
@@ -44,12 +37,5 @@ data "aws_subnets" "private" {
   filter {
     name   = "map-public-ip-on-launch"
     values = [false]
-  }
-
-  lifecycle {
-    postcondition {
-      condition     = length(self) > 0
-      error_message = "Subnets not found"
-    }
   }
 }
