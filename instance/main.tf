@@ -3,9 +3,9 @@ provider "aws" {
 }
 
 resource "aws_instance" "example" {
-  ami                    = data.aws_ami.ubuntu_minimal_arm64.id
+  ami                    = module.data.ami_ubuntu_minimal_arm64
   instance_type          = "t4g.nano"
-  subnet_id              = module.vpc.public_subnets[0]
+  subnet_id              = module.data.public_subnets[0]
   vpc_security_group_ids = [aws_security_group.instance.id]
   key_name               = aws_key_pair.ec2_key.key_name
 
@@ -33,7 +33,7 @@ resource "aws_instance" "example" {
 
 resource "aws_security_group" "instance" {
   name   = "tf+example-instance"
-  vpc_id = module.vpc.vpc_id
+  vpc_id = module.data.vpc_id
 
   ingress {
     from_port   = var.server_port
@@ -71,18 +71,5 @@ resource "aws_key_pair" "ec2_key" {
 
   tags = {
     creator = "terraform"
-  }
-}
-
-data "aws_ami" "ubuntu_minimal_arm64" {
-  most_recent = true
-  owners      = ["amazon"]
-  filter {
-    name   = "name"
-    values = ["*/ubuntu-noble-24.*-arm64-minimal-*"]
-  }
-  filter {
-    name   = "architecture"
-    values = ["arm64"]
   }
 }
