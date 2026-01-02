@@ -1,0 +1,17 @@
+terraform {
+  required_providers {
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
+  }
+
+  backend "s3" {
+    # ! replace this with your unique bucket name
+    bucket         = "devops-terraform-state-e7674df2-4976-0e83-3463-dcf97a087f97"
+    key            = "@global/s3-backend/terraform.tfstate"
+    region         = "us-west-2"
+    dynamodb_table = "devops-terraform-locks"
+    encrypt        = true
+  }
+}
