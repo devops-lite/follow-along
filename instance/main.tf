@@ -1,5 +1,11 @@
 provider "aws" {
   region = var.region
+
+  default_tags {
+    tags = {
+      creator = "terraform"
+    }
+  }
 }
 
 resource "aws_instance" "example" {
@@ -19,8 +25,7 @@ resource "aws_instance" "example" {
   user_data_replace_on_change = true
 
   tags = {
-    Name    = "tf+example"
-    creator = "terraform"
+    Name = "tf+example"
   }
 
   instance_market_options {
@@ -59,17 +64,9 @@ resource "aws_security_group" "instance" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = {
-    creator = "terraform"
-  }
 }
 
 resource "aws_key_pair" "ec2_key" {
   key_name   = "tf+ec2-key"
   public_key = file("~/.ssh/id_rsa.pub")
-
-  tags = {
-    creator = "terraform"
-  }
 }

@@ -1,5 +1,11 @@
 provider "aws" {
   region = var.region
+
+  default_tags {
+    tags = {
+      creator = "terraform"
+    }
+  }
 }
 
 resource "aws_launch_template" "example" {
@@ -26,12 +32,10 @@ resource "aws_launch_template" "example" {
   tag_specifications {
     resource_type = "spot-instances-request"
     tags = {
+      # default tags not applied
+      # @see https://github.com/hashicorp/terraform-provider-aws/issues/32328
       creator = "terraform"
     }
-  }
-
-  tags = {
-    creator = "terraform"
   }
 }
 
@@ -50,10 +54,6 @@ resource "aws_security_group" "lt" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    creator = "terraform"
   }
 }
 
@@ -81,22 +81,23 @@ resource "aws_autoscaling_group" "example" {
     propagate_at_launch = true
   }
 
-  tag {
-    key                 = "creator"
-    value               = "terraform"
-    propagate_at_launch = true
+  dynamic "tag" {
+    for_each = data.aws_default_tags.current.tags
+    content {
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
+    }
   }
 }
+
+data "aws_default_tags" "current" {}
 
 resource "aws_alb" "example" {
   name               = "tf-asg-example"
   load_balancer_type = "application"
   subnets            = module.data.public_subnets
   security_groups    = [aws_security_group.alb.id]
-
-  tags = {
-    creator = "terraform"
-  }
 }
 
 resource "aws_lb_listener" "http" {
@@ -111,10 +112,6 @@ resource "aws_lb_listener" "http" {
       content_type = "text/plain"
       message_body = "Page not found"
     }
-  }
-
-  tags = {
-    creator = "terraform"
   }
 }
 
@@ -135,10 +132,6 @@ resource "aws_security_group" "alb" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = {
-    creator = "terraform"
-  }
 }
 
 resource "aws_lb_target_group" "asg" {
@@ -156,10 +149,6 @@ resource "aws_lb_target_group" "asg" {
     healthy_threshold   = 2
     unhealthy_threshold = 2
   }
-
-  tags = {
-    creator = "terraform"
-  }
 }
 
 resource "aws_lb_listener_rule" "asg" {
@@ -175,9 +164,5 @@ resource "aws_lb_listener_rule" "asg" {
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.asg.arn
-  }
-
-  tags = {
-    creator = "terraform"
   }
 }

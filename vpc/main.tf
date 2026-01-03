@@ -1,13 +1,18 @@
 provider "aws" {
   region = var.aws_region
+
+  default_tags {
+    tags = {
+      creator = "terraform"
+    }
+  }
 }
 
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
-    Name    = "tf+vpc"
-    creator = "terraform"
+    Name = "tf+vpc"
   }
 }
 
@@ -19,8 +24,7 @@ resource "aws_subnet" "public_subnets" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name    = "tf+public-subnet-${count.index + 1}"
-    creator = "terraform"
+    Name = "tf+public-subnet-${count.index + 1}"
   }
 }
 
@@ -31,8 +35,7 @@ resource "aws_subnet" "private_subnets" {
   availability_zone = element(var.azs, count.index)
 
   tags = {
-    Name    = "tf+private-subnet-${count.index + 1}"
-    creator = "terraform"
+    Name = "tf+private-subnet-${count.index + 1}"
   }
 }
 
@@ -40,8 +43,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name    = "tf+igw"
-    creator = "terraform"
+    Name = "tf+igw"
   }
 }
 
@@ -53,8 +55,7 @@ resource "aws_route_table" "rt2" {
   }
 
   tags = {
-    Name    = "tf+rt2"
-    creator = "terraform"
+    Name = "tf+rt2"
   }
 }
 

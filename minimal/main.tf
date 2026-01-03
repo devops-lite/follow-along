@@ -1,5 +1,11 @@
 provider "aws" {
   region = var.region
+
+  default_tags {
+    tags = {
+      creator = "terraform"
+    }
+  }
 }
 
 resource "aws_security_group" "http" {
@@ -19,10 +25,6 @@ resource "aws_security_group" "http" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = {
-    creator = "terraform"
-  }
 }
 
 resource "aws_instance" "hello" {
@@ -39,8 +41,7 @@ resource "aws_instance" "hello" {
               EOF
 
   tags = {
-    Name    = "hello-world"
-    creator = "terraform"
+    Name = "hello-world"
   }
 }
 

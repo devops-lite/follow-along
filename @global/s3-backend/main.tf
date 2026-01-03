@@ -1,5 +1,11 @@
 provider "aws" {
   region = var.aws_region
+
+  default_tags {
+    tags = {
+      creator = "terraform"
+    }
+  }
 }
 
 resource "random_uuid" "bucket" {}
@@ -9,10 +15,6 @@ resource "aws_s3_bucket" "terraform_state" {
 
   lifecycle {
     prevent_destroy = true
-  }
-
-  tags = {
-    creator = "terraform"
   }
 }
 
@@ -48,9 +50,5 @@ resource "aws_dynamodb_table" "terraform_locks" {
   attribute {
     name = "LockID"
     type = "S"
-  }
-
-  tags = {
-    creator = "terraform"
   }
 }
