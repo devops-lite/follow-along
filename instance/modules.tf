@@ -1,3 +1,3 @@
 module "data" {
-  source = "../data"
+  source = "../modules/data"
 }

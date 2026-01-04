@@ -1,13 +1,3 @@
-provider "aws" {
-  region = var.region
-
-  default_tags {
-    tags = {
-      creator = "terraform"
-    }
-  }
-}
-
 resource "aws_db_instance" "example" {
   identifier_prefix   = "tf-example-"
   engine              = "mysql"

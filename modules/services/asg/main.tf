@@ -1,13 +1,3 @@
-provider "aws" {
-  region = var.region
-
-  default_tags {
-    tags = {
-      creator = "terraform"
-    }
-  }
-}
-
 resource "aws_launch_template" "example" {
   name_prefix            = "tf.example-lt-"
   image_id               = module.data.ami_ubuntu_server_arm64
@@ -25,7 +15,7 @@ resource "aws_launch_template" "example" {
   user_data = base64encode(<<-EOF
     #!/bin/bash
     echo "Hello, World" > index.html
-    echo "MySQL: ${module.data.mysql_address}:${module.data.mysql_port}" >> index.html
+    echo "MySQL: ${var.mysql_address}:${var.mysql_port}" >> index.html
     nohup busybox httpd -f -p ${var.server_port} &
     EOF
   )
