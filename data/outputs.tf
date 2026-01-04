@@ -25,3 +25,13 @@ output "devops_secrets" {
   description = "devops secrets (yaml)"
   value       = data.aws_secretsmanager_secret_version.devops.secret_string
 }
+
+output "mysql_address" {
+  description = "mysql address"
+  value       = data.terraform_remote_state.mysql.outputs.address
+}
+
+output "mysql_port" {
+  description = "mysql port"
+  value       = data.terraform_remote_state.mysql.outputs.port
+}
