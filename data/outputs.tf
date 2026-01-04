@@ -20,3 +20,8 @@ output "private_subnets" {
   description = "private subnet IDs"
   value       = data.aws_subnets.private.ids
 }
+
+output "devops_secrets" {
+  description = "devops secrets (yaml)"
+  value       = data.aws_secretsmanager_secret_version.devops.secret_string
+}
