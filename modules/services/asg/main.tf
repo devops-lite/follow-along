@@ -1,5 +1,5 @@
 resource "aws_launch_template" "example" {
-  name_prefix            = "tf.example-lt-"
+  name_prefix            = "${var.cluster_name}-lt-"
   image_id               = module.data.ami_ubuntu_server_arm64
   instance_type          = "t4g.nano"
   vpc_security_group_ids = [aws_security_group.lt.id]
@@ -31,7 +31,7 @@ resource "aws_launch_template" "example" {
 }
 
 resource "aws_security_group" "lt" {
-  name   = "tf+example-lt"
+  name   = "${var.cluster_name}-lt-sg"
   vpc_id = module.data.vpc_id
 
   ingress {
@@ -49,7 +49,7 @@ resource "aws_security_group" "lt" {
 }
 
 resource "aws_autoscaling_group" "example" {
-  name_prefix = "tf.example-asg-"
+  name_prefix = "${var.cluster_name}-asg-"
   launch_template {
     id      = aws_launch_template.example.id
     version = aws_launch_template.example.latest_version
@@ -68,7 +68,7 @@ resource "aws_autoscaling_group" "example" {
 
   tag {
     key                 = "Name"
-    value               = "tf+asg-example"
+    value               = "${var.cluster_name}-instance"
     propagate_at_launch = true
   }
 
@@ -85,7 +85,7 @@ resource "aws_autoscaling_group" "example" {
 data "aws_default_tags" "current" {}
 
 resource "aws_alb" "example" {
-  name               = "tf-asg-example"
+  name               = "${var.cluster_name}-alb"
   load_balancer_type = "application"
   subnets            = module.data.public_subnets
   security_groups    = [aws_security_group.alb.id]
@@ -107,7 +107,7 @@ resource "aws_lb_listener" "http" {
 }
 
 resource "aws_security_group" "alb" {
-  name   = "tf+example-alb"
+  name   = "${var.cluster_name}-alb-sg"
   vpc_id = module.data.vpc_id
 
   ingress {
@@ -126,7 +126,7 @@ resource "aws_security_group" "alb" {
 }
 
 resource "aws_lb_target_group" "asg" {
-  name     = "tf-asg-example"
+  name     = "${var.cluster_name}-tg"
   port     = var.server_port
   protocol = "HTTP"
   vpc_id   = module.data.vpc_id

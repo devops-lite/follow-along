@@ -1,5 +1,5 @@
 resource "aws_db_instance" "example" {
-  identifier_prefix   = "tf-example-"
+  identifier_prefix   = "${var.instance_name_prefix}-"
   engine              = "mysql"
   allocated_storage   = 5
   instance_class      = "db.t4g.micro"

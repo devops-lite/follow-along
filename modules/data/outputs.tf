@@ -1,5 +1,11 @@
+output "env_or_user" {
+  description = "env name or IAM user name"
+  value       = local.env_or_user
+}
+
 output "iam_user" {
-  value = local.iam_user
+  description = "IAM user name if available. 'unknown_user' otherwise"
+  value       = local.iam_user
 }
 
 output "ami_ubuntu_minimal_arm64" {

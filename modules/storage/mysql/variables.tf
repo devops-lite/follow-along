@@ -3,3 +3,8 @@ variable "env" {
   type        = string
   default     = ""
 }
+
+variable "instance_name_prefix" {
+  default = "DB instance name prefix"
+  type    = string
+}

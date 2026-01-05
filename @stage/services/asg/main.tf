@@ -4,6 +4,7 @@ provider "aws" {
   default_tags {
     tags = {
       creator = "terraform"
+      env     = "stage"
     }
   }
 }
@@ -11,6 +12,7 @@ provider "aws" {
 module "asg" {
   source        = "../../../modules/services/asg"
   env           = "stage"
+  cluster_name  = "stage-asg"
   server_port   = 8080
   mysql_address = data.terraform_remote_state.mysql.outputs.address
   mysql_port    = data.terraform_remote_state.mysql.outputs.port
