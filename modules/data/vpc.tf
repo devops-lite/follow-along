@@ -1,15 +1,6 @@
 data "aws_vpc" "this" {
-  default = false
-  tags = {
-    Name = "tf+vpc"
-  }
-
-  lifecycle {
-    postcondition {
-      condition     = self.tags["Name"] == "tf+vpc"
-      error_message = "VPC not found"
-    }
-  }
+  default = (var.vpc_name == "")
+  tags    = var.vpc_name != "" ? { Name = var.vpc_name } : {}
 }
 
 data "aws_subnets" "public" {

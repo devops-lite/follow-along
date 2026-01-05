@@ -25,7 +25,7 @@ resource "aws_instance" "example" {
   user_data_replace_on_change = true
 
   tags = {
-    Name = "tf+example"
+    Name = "${module.data.env_or_user}-instance"
   }
 
   instance_market_options {
@@ -37,7 +37,7 @@ resource "aws_instance" "example" {
 }
 
 resource "aws_security_group" "instance" {
-  name   = "tf+example-instance"
+  name   = "${module.data.env_or_user}-sg"
   vpc_id = module.data.vpc_id
 
   ingress {
@@ -67,6 +67,6 @@ resource "aws_security_group" "instance" {
 }
 
 resource "aws_key_pair" "ec2_key" {
-  key_name   = "tf+ec2-key"
+  key_name   = "${module.data.env_or_user}-instance-key"
   public_key = file("~/.ssh/id_rsa.pub")
 }

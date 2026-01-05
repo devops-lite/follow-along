@@ -12,6 +12,7 @@ provider "aws" {
 module "asg" {
   source        = "../../../modules/services/asg"
   env           = "stage"
+  vpc_name      = "stage-vpc"
   cluster_name  = "stage-asg"
   server_port   = 8080
   mysql_address = data.terraform_remote_state.mysql.outputs.address

@@ -1,5 +1,5 @@
 variable "env" {
-  description = "environment name: [ci, stage, prod]. For local env, current aws IAM username is used"
+  description = "environment name: [dev_xxx, ci, stage, prod]"
   type        = string
   default     = ""
 }

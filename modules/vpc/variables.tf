@@ -1,12 +1,17 @@
-variable "aws_region" {
-  type    = string
-  default = "us-west-2"
+variable "vpc_name" {
+  type = string
 }
 
 variable "azs" {
   type        = list(string)
   description = "availability zones"
   default     = ["us-west-2a", "us-west-2b", "us-west-2c"]
+}
+
+variable "vpc_cidr" {
+  type        = string
+  description = "VPC CIDR block"
+  default     = "10.0.0.0/16"
 }
 
 variable "public_subnet_cidrs" {
