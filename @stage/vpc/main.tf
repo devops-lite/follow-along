@@ -12,4 +12,5 @@ provider "aws" {
 module "vpc" {
   source   = "../../modules/vpc"
   vpc_name = "stage-vpc"
+  azs      = [for s in ["a", "b", "c"] : "${var.region}${s}"]
 }
